@@ -1,6 +1,15 @@
 const knex = require('knex');
 const knexConfig = require('../knexfile');
+require('dotenv').config();
 
-const db = knex(knexConfig.development);
+const appEnv = process.env.APP_ENV || 'development';
+
+let db;
+
+try {
+  db = knex(knexConfig[appEnv]);
+} catch (error) {
+  console.error('Error connecting to the database:', error);
+}
 
 module.exports = db;
