@@ -1,4 +1,3 @@
-const User = require('../models/user')
 const knex = require('../utils/db')
 
 const UserRepository = {
