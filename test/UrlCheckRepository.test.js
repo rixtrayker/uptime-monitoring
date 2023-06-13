@@ -44,3 +44,23 @@ describe('findByTags', () => {
   //   await expect(UrlCheckRepository.findByTags(tags)).rejects.toThrow(Error('Database error'));
   // });
 });
+
+
+describe('createUrl', () => {
+  afterAll(async () => {
+    await knex('url_checks').whereIn('url',urls).del();
+  });
+
+  test('should return rows matching the provided tags', async () => {
+    UrlCheckRepository.createUrl([
+      { name: 'na1', url: urls[0], protocol: 'HTTP', tags: wantedTags },
+      { name: 'nb2', url: urls[1], protocol: 'HTTP', tags: wantedTags },
+      { name: 'nc3', url: urls[2], protocol: 'HTTP', tags: unwantedTags },
+    ]);
+    const result = await knex('url_checks').whereIn('url',urls).select('*');
+
+    expect(result.length).toBe(3);
+    expect(result[0].name).toBe('na1');
+    expect(result[1].name).toBe('nb2');
+  });
+});
