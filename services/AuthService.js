@@ -1,11 +1,9 @@
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const Joi = require('joi');
+const {generateToken} = require('../utils/authUtil');
 const UserRepository = require('../repositories/UserRepository');
-const JWTConfig = require('../config/jwt');
 
 const AuthService = {
-  async signup({name, email, password}) {
+  async register({name, email, password}) {
     const existingUser = await UserRepository.getUserByEmail(email);
     if (existingUser) {
       throw new Error('User with the provided email already exists');
@@ -31,7 +29,7 @@ const AuthService = {
       throw new Error('Please verify your email');
     }
 
-    const token = jwt.sign({ email: user.email }, JWTConfig.secret, { expiresIn: '1h' });
+    const token = generateToken(user);
     return {token};
   },
 };

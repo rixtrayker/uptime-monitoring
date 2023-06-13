@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-exports.validateSignup = function(user) {
+exports.validateRegister = function(user) {
     const schema = Joi.object({
       name: Joi.string().required(),
       email: Joi.string().email().required(),
