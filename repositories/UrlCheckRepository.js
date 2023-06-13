@@ -4,10 +4,6 @@ const UrlCheck = require('../models/UrlCheck');
 const UrlCheckRepository = {
   async createUrl(urls) {
     try {
-      if (!Array.isArray(urls)) {
-        urls = [urls]; // Convert a single URL to an array
-      }
-
       await knex('url_checks').insert(urls);
       const rows = await knex('url_checks').whereIn('url', extractUrls(urls)).select('*');
       return rows;
