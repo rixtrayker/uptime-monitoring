@@ -16,7 +16,6 @@ describe('User Repository', () => {
   });
 
   afterAll(async () => {
-    // Clean up the test data
     await knex('users').where({ email: testEmail }).del();
   });
 

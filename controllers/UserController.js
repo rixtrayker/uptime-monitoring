@@ -1,56 +1,41 @@
-const Joi = require('joi');
 const UserService = require('../services/UserService');
 const { StatusCodes } = require('http-status-codes');
-
+const { validateUpdateUser } = require('../validate/UserValidator');
 
 const UserController = {
 
-  async createUser(req, res) {
+  async updateUser(req, res) {
     try {
-      const { error: validationError } = validateUser(req.body);
-      if (validationError) {
-        res.status(StatusCodes.BAD_REQUEST).json({ error: validationError.details[0].message });
+      const { name, email, password } = req.body; 
+
+      const { error } = validateUpdateUser({ name, email, password });
+      if (error) {
+        res.status(StatusCodes.BAD_REQUEST).json({ error: error.details[0].message });
         return;
       }
 
-      const { name, email, password } = req.body;
-      const existingUser = await UserService.getUserByEmail(email);
-      if (existingUser) {
-        res.status(StatusCodes.CONFLICT).json({ error: 'User with the provided email already exists' });
-        return;
-      }
-
-      const isValidEmail = await UserService.verifyEmail(email);
+      const isValidEmail = await UserService.validEmail(req.id, email);
       if (!isValidEmail) {
-        res.status(StatusCodes.BAD_REQUEST).json({ error: 'Invalid email address' });
+        res.status(StatusCodes.CONFLICT).json({ error: 'Invalid email address' });
         return;
       }
 
-      const user = await UserService.createUser(name, email, password);
-      res.status(StatusCodes.CREATED).json(user);
+      const user = await UserService.updateUser(req.id,{ name, email, password });
+      res.status(StatusCodes.ok).json(user);
     } catch (error) {
       console.error(error);
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred' });
     }
   },
 
-  async verifyEmail(req, res){
-    const success = await UserService.verifyEmail(req.token);
+  async deleteUser(req, res){
+    const success = await UserService.deleteUser(req.id);
     if(!success){
-      return res.status(StatusCodes.NOT_FOUND).json({message:"Wrong link or expired link or verified"});
+      return res.status(StatusCodes.NOT_FOUND).json({message:"User not found"});
     }
 
-    res.status(StatusCodes.OK).json({message:"Your email verified"});
-  }
-}
-
-function validateUser(user) {
-  const schema = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().email().required(),
-  });
-
-  return schema.validate(user);
+    res.status(StatusCodes.OK).json({message:"Deleted successfully"});
+  },
 }
 
 module.exports = UserController;

@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const {generateToken} = require('../utils/authUtil');
 const UserRepository = require('../repositories/UserRepository');
+const knex = require('../utils/db');
 
 const AuthService = {
   async register({name, email, password}) {
@@ -32,6 +33,18 @@ const AuthService = {
     const token = generateToken(user);
     return {token};
   },
+  async verifyEmail(token) {
+    try {
+      const user = await knex('users').where({ email_verification_token:token }).first();
+      if(!user) 
+        return false;
+
+      await knex('users').where({ email_verification_token:token }).update({ verified_at: new Date(), email_verification_token: null });
+      return true;
+    } catch (error) {
+      throw error;
+    }
+  }
 };
 
 module.exports = AuthService;

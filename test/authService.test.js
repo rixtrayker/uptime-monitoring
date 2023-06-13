@@ -1,6 +1,6 @@
 const knex = require('../utils/db');
 const randomstring = require('randomstring');
-const UserService = require('../services/UserService')
+const AuthService = require('../services/AuthService')
 
 describe('User Service', () => {
   let testEmail;
@@ -18,11 +18,11 @@ describe('User Service', () => {
   });
 
   afterAll(async () => {
-    await knex('users').where({ email_verification_token: randomToken }).del();
+    await knex('users').where({ email: testEmail }).del();
   });
 
   test('verifyEmail should validate email verification works', async () => {
-    const result = await UserService.verifyEmail(randomToken);
+    const result = await AuthService.verifyEmail(randomToken);
     const user = await knex('users').where({ email:testEmail }).first();
 
     expect(result).toBeDefined();

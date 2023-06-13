@@ -38,6 +38,14 @@ const AuthController = {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
     }
   },
+  async verifyEmail(req, res){
+    const success = await AuthService.verifyEmail(req.token);
+    if(!success){
+      return res.status(StatusCodes.NOT_FOUND).json({message:"Wrong link or expired link or verified"});
+    }
+
+    res.status(StatusCodes.OK).json({message:"Your email verified"});
+  }
 };
 
 module.exports = AuthController;
