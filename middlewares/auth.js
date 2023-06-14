@@ -19,7 +19,7 @@ async function verifyTokenMiddleware(req, res, next) {
       }
 
       const decoded = await verifyToken(bearerToken);
-      req.email = decoded.email;
+      req.auth = {id:decoded.id, email:decoded.email};
 
       next();
     } catch (error) {

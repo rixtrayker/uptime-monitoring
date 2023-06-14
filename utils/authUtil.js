@@ -12,7 +12,7 @@ function verifyToken(token) {
 }
 
 function generateToken(user) {
-    return jwt.sign({ email: user.email }, config.secret, { expiresIn: '1h' });
+    return jwt.sign({ id:user.id, email: user.email }, config.secret, { expiresIn: '1h' });
 }
 
 module.exports = { verifyToken , generateToken};
