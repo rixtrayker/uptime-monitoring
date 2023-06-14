@@ -1,11 +1,11 @@
-const UrlCheckService = require('../services/UrlCheckService');
+const UrlService = require('../services/UrlService');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
-const {validateCreate, validateUpdate } = require('../validate/UrlCheckValidator');
+const {validateCreate, validateUpdate } = require('../validate/UrlCrudValidator');
 
-const UrlCheckController =  {
+const UrlController =  {
     async getUrl(req, res){
       const { id } = req.params;
-      const url = await UrlCheckService.getUrl(id);
+      const url = await UrlService.getUrl(id);
       if(Object.keys(url).length === 0) {
         res.status(StatusCodes.NOT_FOUND).send(ReasonPhrases.NOT_FOUND);
         return;
@@ -21,7 +21,7 @@ const UrlCheckController =  {
         return;
       }
 
-      const url = await UrlCheckService.createUrl(req.body, 1);
+      const url = await UrlService.createUrl(req.body, 1);
       res.status(StatusCodes.CREATED).send({url});
     },
 
@@ -34,7 +34,7 @@ const UrlCheckController =  {
         res.status(StatusCodes.BAD_REQUEST).json({ error: error.details[0].message });
         return;
       }
-      const result = await UrlCheckService.updateUrl(id, url);
+      const result = await UrlService.updateUrl(id, url);
       if(Object.keys(result).length === 0) {
         res.status(StatusCodes.NOT_FOUND).send(ReasonPhrases.NOT_FOUND);
         return;
@@ -53,7 +53,7 @@ const UrlCheckController =  {
         return;
       }
 
-      const urls = await UrlCheckService.findByTags(tags);
+      const urls = await UrlService.findByTags(tags);
       if(Object.keys(urls).length === 0) {
         res.status(StatusCodes.NOT_FOUND).send(ReasonPhrases.NOT_FOUND);
         return;
@@ -65,7 +65,7 @@ const UrlCheckController =  {
     async deleteUrl(req, res){
       const { id } = req.params;
 
-      const success = await UrlCheckService.deleteUrl(id);
+      const success = await UrlService.deleteUrl(id);
       if(!success){
         return res.status(StatusCodes.NOT_FOUND).json({message:"URL not found"});
       }
@@ -74,4 +74,4 @@ const UrlCheckController =  {
     },
 };
 
-module.exports = UrlCheckController;
+module.exports = UrlController;

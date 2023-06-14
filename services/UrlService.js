@@ -1,9 +1,9 @@
-const UrlCheckRepository = require('../repositories/UrlCheckRepository');
+const UrlRepository = require('../repries/UrlRepository');
 
-const UrlCheckService = {
+const UrlService = {
   async getUrl(id) {
     try {
-      const row = await UrlCheckRepository.getUrl(id);
+      const row = await UrlRepository.getUrl(id);
       return row;
     } catch (error) {
       throw error;
@@ -14,7 +14,7 @@ const UrlCheckService = {
     try {
       data = makeSureItsArray(data)
       const urls = addUserIdsToObjects(data);
-      const rows = await UrlCheckRepository.createUrl(urls);
+      const rows = await UrlRepository.createUrl(urls);
       return rows;
     } catch (error) {
       throw error;
@@ -30,7 +30,7 @@ const UrlCheckService = {
 
       delete url.user_id;
 
-      const row = await UrlCheckRepository.updateUrl(id, url);
+      const row = await UrlRepository.updateUrl(id, url);
       return row;
     } catch (error) {
       throw error;
@@ -39,7 +39,7 @@ const UrlCheckService = {
 
   async findByTags(tags){
     try {
-      const rows = await UrlCheckRepository.findByTags(tags);
+      const rows = await UrlRepository.findByTags(tags);
       return rows;
     } catch (error) {
       throw error;
@@ -48,7 +48,7 @@ const UrlCheckService = {
   
   async deleteUrl(id) {
     try {
-      return await UrlCheckRepository.deleteUrl(id);
+      return await UrlRepository.deleteUrl(id);
     } catch (error) {
       throw error;
     }
@@ -70,4 +70,4 @@ function makeSureItsArray(data) {
 }
 
 
-module.exports = UrlCheckService;
+module.exports = UrlService;

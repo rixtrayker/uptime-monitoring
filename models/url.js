@@ -1,11 +1,11 @@
 const { Model } = require('objection');
-const db = require('../utils/db')
+const db = require('../utils/db');
 
 Model.knex(db);
 
-class URLCheck extends Model {
+class Url extends Model {
   static get tableName() {
-    return 'url_checks';
+    return 'urls';
   }
 
   static get jsonSchema() {
@@ -35,4 +35,4 @@ class URLCheck extends Model {
   }
 }
 
-module.exports = URLCheck;
+module.exports = Url;
