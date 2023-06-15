@@ -28,8 +28,7 @@ class Url extends Model {
         assert: { type: 'object', nullable: true },
         tags: { type: 'array', items: { type: 'string' }, nullable: true },
         ignore_ssl: { type: 'boolean', nullable: true, default: false },
-        created_at: { type: 'timestamp' },
-        updated_at: { type: 'timestamp' },
+        user_id: { type: 'integer' },
       },
     };
   }

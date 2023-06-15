@@ -1,4 +1,4 @@
-const UrlRepository = require('../repries/UrlRepository');
+const UrlRepository = require('../repositories/UrlRepository');
 
 const UrlService = {
   async getUrl(id) {
@@ -10,10 +10,20 @@ const UrlService = {
     }
   },
 
+  async getAllUrls(userId) {
+    try {
+      const row = await UrlRepository.getAllUrls(userId);
+      return row;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   async createUrl(data, userId) {
     try {
       data = makeSureItsArray(data)
-      const urls = addUserIdsToObjects(data);
+      const urls = data.map((obj) => {return { ...obj, user_id: userId };});
+
       const rows = await UrlRepository.createUrl(urls);
       return rows;
     } catch (error) {
@@ -54,12 +64,6 @@ const UrlService = {
     }
   },
 };
-
-function addUserIdsToObjects(array, userId) {
-  return array.map((obj) => {
-    return { ...obj, user_id: userId };
-  });
-}
 
 function makeSureItsArray(data) {
   if (Array.isArray(data)) {

@@ -3,6 +3,7 @@ const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const {validateCreate, validateUpdate } = require('../validate/UrlCrudValidator');
 
 const UrlController =  {
+  
     async getUrl(req, res){
       const { id } = req.params;
       const url = await UrlService.getUrl(id);
@@ -14,15 +15,41 @@ const UrlController =  {
       }
     },
 
+    async getAllUrls(req, res){
+      let { tags } = req.query;
+
+      if(tags){
+        return await this.findByTags(req, res);
+      }
+
+      const userId = req.auth.id;
+      try{
+        const url = await UrlService.getAllUrls(userId);
+        if(Object.keys(url).length === 0) {
+          res.status(StatusCodes.NOT_FOUND).send(ReasonPhrases.NOT_FOUND);
+          return;
+        } else {
+          res.status(StatusCodes.OK).send({url});
+        }
+      }
+      catch(error){
+          res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({error});
+      }
+    },
+
     async createUrl(req, res){
-      const { error } = validateCreate();
+      const { error } = validateCreate(req.body);
       if (error) {
         res.status(StatusCodes.BAD_REQUEST).json({ error: error.details[0].message });
         return;
       }
-
-      const url = await UrlService.createUrl(req.body, 1);
-      res.status(StatusCodes.CREATED).send({url});
+      
+      try{
+        const url = await UrlService.createUrl(req.body, req.auth.id);
+        res.status(StatusCodes.CREATED).send({url});
+      } catch(error){
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({error:error.message});
+      }
     },
 
     async updateUrl(req, res){
@@ -34,31 +61,41 @@ const UrlController =  {
         res.status(StatusCodes.BAD_REQUEST).json({ error: error.details[0].message });
         return;
       }
-      const result = await UrlService.updateUrl(id, url);
-      if(Object.keys(result).length === 0) {
-        res.status(StatusCodes.NOT_FOUND).send(ReasonPhrases.NOT_FOUND);
-        return;
-      } else{
-        res.status(StatusCodes.OK).send({url:result});
+      
+      try{
+        const result = await UrlService.updateUrl(id, url);
+
+        if(Object.keys(result).length === 0) {
+          res.status(StatusCodes.NOT_FOUND).send(ReasonPhrases.NOT_FOUND);
+          return;
+        } else{
+          res.status(StatusCodes.OK).send({url:result});
+        }
+
+      } catch(error){
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({error:error.message});
       }
     },
 
-
     async findByTags(req, res){
       let { tags } = req.query;
-      tags = tags.split(',');
+        tags = tags.split(',');
 
-      if (tags.length < 1) {
-        res.status(StatusCodes.BAD_REQUEST).json({ error:"Empty value not allowed" });
-        return;
+        if (tags.length < 1) {
+          res.status(StatusCodes.BAD_REQUEST).json({ error:"Empty value not allowed" });
+          return;
       }
-
-      const urls = await UrlService.findByTags(tags);
-      if(Object.keys(urls).length === 0) {
-        res.status(StatusCodes.NOT_FOUND).send(ReasonPhrases.NOT_FOUND);
-        return;
-      } else{
-        res.status(StatusCodes.OK).send({urls});
+      
+      try{
+        const urls = await UrlService.findByTags(tags);
+        if(Object.keys(urls).length === 0) {
+          res.status(StatusCodes.NOT_FOUND).send(ReasonPhrases.NOT_FOUND);
+          return;
+        } else{
+          res.status(StatusCodes.OK).send({urls});
+        }
+      } catch(error){
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({error:error.message});
       }
     },
     
