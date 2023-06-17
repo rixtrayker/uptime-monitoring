@@ -3,8 +3,7 @@ const MonitorLog = require('../repositories/ReportRepository');
 const ReportService = {
   async storeLog(log) {
     try {
-      MonitorLog.createLog(log);
-      console.error(log);
+      await MonitorLog.createLog(log);
     } catch (error) {
       console.error(error);
       // todo: log this error
@@ -13,7 +12,7 @@ const ReportService = {
 
   async getTimpstampeAndStatus(urlId) {
     try {
-      const rows = await MonitorLog.selectByUrlId(urlId, ['timestamp', 'status']);
+      const rows = await MonitorLog.selectByUrlId(urlId, ['id','timestamp', 'status']);
       return rows;
     } catch (error) {
       console.error(error);

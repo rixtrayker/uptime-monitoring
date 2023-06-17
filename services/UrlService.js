@@ -1,4 +1,5 @@
 const UrlRepository = require('../repositories/UrlRepository');
+const User = require('../models/User');
 
 const UrlService = {
   async getUrl(id) {
@@ -63,6 +64,16 @@ const UrlService = {
       throw error;
     }
   },
+
+  async getUrlOwner(id) {
+    try {
+      const url = await UrlRepository.getUrl(id);
+      const user = await User.query().where({id: url.user_id}).first();
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
 };
 
 function makeSureItsArray(data) {

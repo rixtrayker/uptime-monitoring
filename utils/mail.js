@@ -2,10 +2,9 @@ const nodemailer = require('nodemailer');
 const fs = require('fs');
 const path = require('path');
 const handlebars = require('handlebars');
-
-class MailService {
-  constructor(config) {
-    // Configure the nodemailer transporter
+const config = require('../config/mail');
+class MailUtil {
+  constructor() {
     this.transporter = nodemailer.createTransport({
       service: config.service,
       auth: {
@@ -16,36 +15,42 @@ class MailService {
   }
 
   renderTemplate(templateName, data) {
-    const templatePath = path.join(__dirname, 'views/templates', `${templateName}.hbs`);
+    const templatePath = path.join(__dirname, '/../views/templates', `${templateName}.hbs`);
     const template = fs.readFileSync(templatePath, 'utf8');
     const compiledTemplate = handlebars.compile(template);
     const renderedTemplate = compiledTemplate(data);
     return renderedTemplate;
   }
 
-  getMailOptions(userEmail,message) {
-    const renderedTemplate = renderTemplate('notification', { message });
+  getMailOptions(userEmail, reportData) {
+    const renderedTemplate = this.renderTemplate('notification', reportData);
 
     return {
-      from: process.env.EMAIL_USER,
+      from: config.sender,
       to: userEmail,
       subject: 'Monitoring Notification',
       html: renderedTemplate,
     };
   }
 
-  sendMail(mailOptions) {
-    return new Promise((resolve, reject) => {
-      // Send the email
-      this.transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(info);
-        }
+  async sendMail(userEmail, reportData) {
+    try {
+      const mailOptions = this.getMailOptions(userEmail, reportData);
+      const info = await new Promise((resolve, reject) => {
+        this.transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(info);
+          }
+        });
       });
-    });
+
+      return info;
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 
-module.exports = MailService;
+module.exports = MailUtil;

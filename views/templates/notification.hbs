@@ -3,9 +3,60 @@
   <head>
     <meta charset="UTF-8" />
     <title>Monitoring Notification</title>
-  </head>
+  </head><!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .title {
+      text-align: center;
+      font-weight: bold;
+    }
+    .details {
+      margin-bottom: 10px;
+    }
+    .history {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="title">
+    <h1>Monitoring URl Report</h1>
+  </div>
+
+  <div class="details">
+    <p>
+      <b>Status:</b> {{status}}
+    </p>
+    <p>
+      <b>Availability:</b> {{availability}}
+    </p>
+    <p>
+      <b>Outages:</b> {{outages}}
+    </p>
+    <p>
+      <b>Downtime:</b> {{downtime}}
+    </p>
+    <p>
+      <b>Uptime:</b> {{uptime}}
+    </p>
+    <p>
+      <b>Response Time:</b> {{responseTime}}
+    </p>
+  </div>
+
+  <div class="history">
+    <h2>History:</h2>
+    <ul>
+      {{#each history}}
+        <li>{{timestamp}} - <b>{{status}}</b></li>
+      {{/each}}
+    </ul>
+  </div>
+</body>
+</html>
+
   <body>
     <h1>Url state</h1>
-    <p>{{message}}</p>
   </body>
 </html>
