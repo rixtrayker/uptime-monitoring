@@ -12,7 +12,7 @@ class NotificationChannel extends Channel {
 
   name = 'main-channel';
 
-  async up(res, state) {
+  async restored(res, state) {
     this.sendNotification(state);
   }
 
@@ -22,20 +22,22 @@ class NotificationChannel extends Channel {
     }
   }
 
-  stop(res, state) {}
-
-  error(error, res) {}
-
   async timeout(error, res, state) {
     if (state.shouldAlertDown) {
       this.sendNotification(state);
     }
   }
 
+  up(res, state) {}
+
+  stop(res, state) {}
+
+  error(error, res) {}
+
   async sendNotification(state) {
     const report = await generateReport(state);
-    
-    try{  
+
+    try {
       await this.mailer.sendMail(state.metaData.email, report);
     } catch (err) {
       logger.error(error);

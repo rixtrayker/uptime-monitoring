@@ -13,6 +13,10 @@ async function monitor(url) {
     storeLog('up', res, state);
   });
 
+  urlMonitor.on('restored', (res, state) => {
+    storeLog('up', res, state);
+  });
+
   urlMonitor.on('down', (error, res, state) => {
     storeLog('down', res, state);
   });
