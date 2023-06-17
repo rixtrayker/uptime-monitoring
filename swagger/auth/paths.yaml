@@ -1,0 +1,55 @@
+/‌register:
+  post:
+    summary: User registration
+    tags:
+      - Authentication
+    parameters:
+      - name: body
+        in: body
+        required: true
+        description: User registration details
+        schema:
+          $ref: '#/definitions/UserRegistration'
+    responses:
+      '201':
+        description: Successful registration
+        schema:
+          $ref: '#/definitions/RegistrationResponse'
+/login:
+  post:
+    summary: User login
+    tags:
+      - Authentication
+    parameters:
+      - name: body
+        in: body
+        required: true
+        description: Login credentials
+        schema:
+          $ref: '#/definitions/UserLogin'
+    responses:
+      '200':
+        description: Successful login
+        schema:
+          $ref: '#/definitions/LoginResponse'
+/verify:
+  post:
+    summary: Verify email
+    tags:
+      - Authentication
+    parameters:
+      - name: body
+        in: body
+        required: true
+        description: Email verification token
+        schema:
+          $ref: '#/definitions/EmailVerification'
+    responses:
+      '200':
+        description: Email verification successful
+        schema:
+          $ref: '#/definitions/EmailVerificationResponse'
+      '404':
+        description: Wrong or expired link or already verified
+        schema:
+          $ref: '#/definitions/Error'

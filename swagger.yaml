@@ -1,0 +1,8 @@
+swagger: '2.0'
+info:
+  title: Monitoring Service API Documentation
+  version: 1.0.0
+paths:
+  $ref: './swagger/auth/paths.yaml'
+definitions:
+  $ref: './swagger/auth/definitions.yaml'
