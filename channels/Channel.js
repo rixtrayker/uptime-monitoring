@@ -11,6 +11,8 @@ class Channel {
   error(error, res) {}
 
   timeout(error, res) {}
+  
+  restored(error, res) {}
 }
 
 module.exports = Channel;
