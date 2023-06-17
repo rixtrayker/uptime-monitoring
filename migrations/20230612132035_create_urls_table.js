@@ -7,8 +7,8 @@ exports.up = function (knex) {
     table.string('path').nullable();
     table.integer('port').nullable();
     table.string('webhook').nullable();
-    table.integer('timeout').nullable().defaultTo(5);
-    table.integer('interval').nullable().defaultTo(10);
+    table.integer('timeout').nullable().defaultTo(5).comment('Time in seconds');
+    table.integer('interval').nullable().defaultTo(10).comment('Time in minutes');
     table.integer('threshold').nullable().defaultTo(1);
     table.jsonb('authentication').nullable();
     table.jsonb('http_headers').nullable();
@@ -18,6 +18,9 @@ exports.up = function (knex) {
     table.integer('user_id').unsigned();
     table.foreign('user_id').references('id').inTable('users');
     table.timestamps(true, true);
+
+    // indexes
+    table.index('tags', null, 'gin');
   });
 };
 

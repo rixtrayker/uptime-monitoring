@@ -10,6 +10,7 @@ try {
   db = knex(knexConfig[appEnv]);
 } catch (error) {
   console.error('Error connecting to the database:', error);
+  throw new Error('Error connecting to the database');
 }
 
 module.exports = db;

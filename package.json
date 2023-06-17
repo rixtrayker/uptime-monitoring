@@ -21,6 +21,7 @@
     "morgan": "~1.9.1",
     "objection": "^3.0.1",
     "pg": "^8.11.0",
+    "ping-monitor-fork": "^0.8.3",
     "randomstring": "^1.3.0"
   },
   "devDependencies": {

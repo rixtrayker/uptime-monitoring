@@ -4,6 +4,7 @@ exports.up = function (knex) {
     table.integer('url_id').unsigned();
     table.foreign('url_id').references('id').inTable('urls');
     table.enu('status', ['up', 'down']).notNullable();
+    table.integer('response_time').nullable().comment('Time in milliseconds');
     table.timestamp('timestamp').defaultTo(knex.fn.now());
     table.timestamps(true, true);
   });
