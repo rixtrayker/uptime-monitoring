@@ -10,9 +10,13 @@ const reportUtils = {
     let downtime = urlState.totalDownTimes * urlState.interval * 60;
     let uptime = (totalUpTimes * urlState.interval).toFixed(2);
     let responseTime = urlState.avgResponseTime.toFixed(2);
-
     let urlId = urlState.metaData.urlId;
-    let history = ReportService.getTimpstampeAndStatus(urlId);
+    let history = await ReportService.getTimpstampeAndStatus(urlId);
+
+    history = history.map(entry => ({
+      timestamp: new Date(entry.timestamp).toLocaleString(),
+      status: entry.status.toUpperCase(),
+    }));
 
     return {
       status,

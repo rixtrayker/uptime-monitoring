@@ -1,13 +1,19 @@
+const urlService = require('../services/urlService');
+
 const urlUtils = {
   getUrlMonitorConfig(url) {
+    const urlOwner = urlService.getUrlOwner(url.id);
     return {
-      website: url.url,
+      website: getFullUrl(url),
       title: url.name,
       port: url.port,
       protocol: url.protocol.toLowerCase(),
       interval: url.interval,
       timeout: url.timeout,
       ignoreSSL: url.ignoreSSL,
+      config: {
+        intervalUnits: 'seconds'
+      },
       httpOptions: {
         path: url.path,
         headers: getHeaders(url),
@@ -17,6 +23,7 @@ const urlUtils = {
       },
       metaData: {
         urlId: url.id,
+        email: urlOwner.email || process.env.DEFAULT_EMAIL,
       },
     };
   },
@@ -37,6 +44,13 @@ const urlUtils = {
     }
     return httpHeaders;
   },
+
+  getFullUrl(url){
+    if(url.port)
+      return `${url.protocol}://${url.url}:${url.port}/${url.path}`;
+    else
+      return `${url.protocol}://${url.url}/${url.path}`;
+  }
 };
 
 module.exports = urlUtils;
