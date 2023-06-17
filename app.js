@@ -6,6 +6,8 @@ var logger = require('morgan');
 const swagger = require('./utils/swagger');
 var indexRouter = require('./routes/index');
 var urlChecksRouter = require('./routes/urlChecks');
+const helmet = require("helmet");
+const RateLimit = require("express-rate-limit");
 
 var app = express();
 
@@ -21,9 +23,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/urls', urlChecksRouter);
-var testRouter = require('./tester');
-// app.use('/test', testRouter);
-app.use('/test/:testId', testRouter);
+
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      "script-src": ["'self'", "code.jquery.com", "cdn.jsdelivr.net"],
+    },
+  })
+);
+
+// Apply rate limiter
+const limiter = RateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 20,
+});
+app.use(limiter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
