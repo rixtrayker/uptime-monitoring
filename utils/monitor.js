@@ -1,23 +1,24 @@
 const Monitor = require('ping-monitor-fork');
-const Notifier = require('./notifier');
+const NotificationChannel = require('../channels/NotificationChannel');
+// const SlackChannel = require('../channels/NotificationChannel'); 
 const ReportService = require('../services/ReportService');
 
 async function monitor(url) {
   const urlMonitor = new Monitor(url);
 
+  // Notification channels
+  urlMonitor.addChannel(new NotificationChannel());
+
   urlMonitor.on('up', (res, state) => {
     storeLog('up', res, state);
-    notify(res);
   });
 
   urlMonitor.on('down', (error, res, state) => {
     storeLog('down', res, state);
-    notify(res);
   });
 
   urlMonitor.on('timeout', (error, res, state) => {
     storeLog('timeout', res, state);
-    notify(res);
   });
 
   urlMonitor.on('error', (error, res, state) => {
@@ -37,12 +38,6 @@ async function storeLog(status, res, state) {
   };
 
   ReportService.storeLog(log);
-}
-
-async function notify(res) {
-  if (res.shouldAlertDown) {
-    await Notifier.notify(res);
-  }
 }
 
 module.exports = monitor;

@@ -2,15 +2,17 @@ const ReportService = require('../services/ReportService');
 
 const reportUtils = {
   async generateReport(urlState) {
-    const status = ['DOWN', 'UP'][urlState.isUp & 1];
-    const availability = ((urlState.totalDownTimes / urlState.totalRequests) * 100).toFixed(2);
-    const outages = urlState.totalDownTimes;
-    const downtime = urlState.totalDownTimes * urlState.interval * 60;
-    const uptime = urlState.totalRequests * urlState.interval * 60;
-    const responseTime = urlState.averageResponseTime.toFixed(2);
+    let totalUpTimes = urlState.totalRequests - urlState.totalDownTimes;
 
-    const urlId = urlState.metaData.urlId;
-    const history = await ReportService.getTimpstampeAndStatus(urlId);
+    let status = ['DOWN', 'UP'][urlState.isUp & 1];
+    let availability = ((totalUpTimes / urlState.totalRequests) * 100).toFixed(2);
+    let outages = urlState.totalDownTimes;
+    let downtime = urlState.totalDownTimes * urlState.interval * 60;
+    let uptime = (totalUpTimes * urlState.interval).toFixed(2);
+    let responseTime = urlState.avgResponseTime.toFixed(2);
+
+    let urlId = urlState.metaData.urlId;
+    let history = ReportService.getTimpstampeAndStatus(urlId);
 
     return {
       status,
@@ -21,10 +23,6 @@ const reportUtils = {
       responseTime,
       history,
     };
-  },
-
-  availabilityPercent(outages, uptime) {
-    return uptime / (uptime + outages);
   },
 };
 

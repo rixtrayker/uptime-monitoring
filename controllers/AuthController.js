@@ -7,7 +7,6 @@ const AuthController = {
   async register(req, res) {
     try {
       const {name,email,password} = req.body;
-      console.log(email);
       const { error } = validateRegister({name,email,password});
       if (error) {
         res.status(StatusCodes.BAD_REQUEST).json({ error: error.details[0].message });

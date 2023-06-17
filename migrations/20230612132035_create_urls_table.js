@@ -8,7 +8,7 @@ exports.up = function (knex) {
     table.integer('port').nullable();
     table.string('webhook').nullable();
     table.integer('timeout').nullable().defaultTo(5).comment('Time in seconds');
-    table.integer('interval').nullable().defaultTo(10).comment('Time in minutes');
+    table.integer('interval').nullable().defaultTo(600).comment('Time in seconds');
     table.integer('threshold').nullable().defaultTo(1);
     table.jsonb('authentication').nullable();
     table.jsonb('http_headers').nullable();
