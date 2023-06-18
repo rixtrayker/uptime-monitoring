@@ -3,6 +3,280 @@ info:
   title: Monitoring Service API Documentation
   version: 1.0.0
 paths:
-  $ref: './swagger/auth/paths.yaml'
+  /‌register:
+    post:
+      summary: User registration
+      tags:
+        - Authentication
+      parameters:
+        - name: body
+          in: body
+          required: true
+          description: User registration details
+          schema:
+            $ref: '#/definitions/UserRegistration'
+      responses:
+        '201':
+          description: Successful registration
+          schema:
+            $ref: '#/definitions/RegistrationResponse'
+  /login:
+    post:
+      summary: User login
+      tags:
+        - Authentication
+      parameters:
+        - name: body
+          in: body
+          required: true
+          description: Login credentials
+          schema:
+            $ref: '#/definitions/UserLogin'
+      responses:
+        '200':
+          description: Successful login
+          schema:
+            $ref: '#/definitions/LoginResponse'
+  /verify:
+    post:
+      summary: Verify email
+      tags:
+        - Authentication
+      parameters:
+        - name: body
+          in: body
+          required: true
+          description: Email verification token
+          schema:
+            $ref: '#/definitions/EmailVerification'
+      responses:
+        '200':
+          description: Email verification successful
+          schema:
+            $ref: '#/definitions/EmailVerificationResponse'
+        '404':
+          description: Wrong or expired link or already verified
+          schema:
+  /urls/{id}:
+    get:
+      summary: Get URL by ID
+      tags:
+        - URL CRUD
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Url'
+        '404':
+          description: Not Found
+    put:
+      summary: Update URL by ID
+      tags:
+        - URL CRUD
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Url'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Url'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+    delete:
+      summary: Delete URL by ID
+      tags:
+        - URL CRUD
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/SuccessMessage'
+        '404':
+          description: Not Found
+  /urls:
+    get:
+      summary: Get all URLs
+      tags:
+        - URL CRUD
+      parameters:
+        - in: query
+          name: tags
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/UrlArray'
+        '404':
+          description: Not Found
+    post:
+      summary: Create a new URL
+      tags:
+        - URL CRUD
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Url'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Url'
+        '400':
+          description: Bad Request
+
 definitions:
-  $ref: './swagger/auth/definitions.yaml'
+  UserRegistration:
+    type: object
+    properties:
+      name:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+  RegistrationResponse:
+    type: object
+    properties:
+      message:
+        type: string
+      user:
+        $ref: '#/definitions/UserRegistration'
+  UserLogin:
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+  LoginResponse:
+    type: object
+    properties:
+      message:
+        type: string
+      token:
+        type: string
+  EmailVerification:
+    type: object
+    properties:
+      token:
+        type: string
+  EmailVerificationResponse:
+    type: object
+    properties:
+      message:
+        type: string
+  Error:
+    type: object
+    properties:
+      message:
+        type: string
+  Url:
+    type: object
+    properties:
+      id:
+        type: string
+      url:
+        type: string
+      user_id:
+        type: string
+      name:
+        type: string
+      protocol:
+        type: string
+        enum: [HTTP, HTTPS, TCP]
+      path:
+        type: string
+        nullable: true
+      port:
+        type: integer
+        nullable: true
+      webhook:
+        type: string
+        nullable: true
+      timeout:
+        type: integer
+        nullable: true
+        default: 5
+      interval:
+        type: integer
+        nullable: true
+        default: 10
+      threshold:
+        type: integer
+        nullable: true
+        default: 1
+      authentication:
+        type: object
+        nullable: true
+      http_headers:
+        type: object
+        nullable: true
+      assert:
+        type: object
+        nullable: true
+      tags:
+        type: array
+        items:
+          type: string
+        nullable: true
+      ignore_ssl:
+        type: boolean
+        nullable: true
+        default: false
+
+  UrlArray:
+    type: array
+    items:
+      $ref: '#/definitions/Url'
+
+  SuccessMessage:
+    type: object
+    properties:
+      message:
+        type: string
+    required:
+      - message
+
+  Error:
+    type: object
+    properties:
+      message:
+        type: string

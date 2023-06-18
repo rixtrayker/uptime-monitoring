@@ -1,0 +1,104 @@
+/urls/{id}:
+  get:
+    summary: Get URL by ID
+    tags:
+      - URL CRUD
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Url'
+      '404':
+        description: Not Found
+  put:
+    summary: Update URL by ID
+    tags:
+      - URL CRUD
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Url'
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Url'
+      '400':
+        description: Bad Request
+      '404':
+        description: Not Found
+  delete:
+    summary: Delete URL by ID
+    tags:
+      - URL CRUD
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/SuccessMessage'
+      '404':
+        description: Not Found
+/urls:
+  get:
+    summary: Get all URLs
+    tags:
+      - URL CRUD
+    parameters:
+      - in: query
+        name: tags
+        schema:
+          type: string
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/UrlArray'
+      '404':
+        description: Not Found
+  post:
+    summary: Create a new URL
+    tags:
+      - URL CRUD
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/definitions/Url'
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Url'
+      '400':
+        description: Bad Request

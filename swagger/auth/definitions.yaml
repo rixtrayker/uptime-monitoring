@@ -14,7 +14,7 @@ definitions:
       message:
         type: string
       user:
-        $ref: '#/definitions/User'
+        $ref: '#/definitions/UserRegistration'
   UserLogin:
     type: object
     properties:
