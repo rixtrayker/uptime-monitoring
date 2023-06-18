@@ -1,47 +1,46 @@
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
+const UrlModel = require('../models/url');
 
-async function idorPrevention(req, res, next) {
+async function preventIdor(req, res, next) {
   try {
-    const model = getModel(req.originalUrl);
+    const model = getModelFromUrl(req.originalUrl);
 
     if (!model) {
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .send({ error: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      return;
     }
 
-    const resouceId = req.params.id;
+    const resourceId = req.params.id;
     const userId = req.auth.id;
+    const result = await model.query().where({ id: resourceId}).where({ user_id: userId }).select('id');
 
-    const result = await model
-      .query()
-      .where({ id: resouceId })
-      .where({ user_id: userId })
-      .select('id');
-
-    if (result.length !== 0) {
-      next();
+    if (result.length === 0) {
+      res.status(StatusCodes.UNAUTHORIZED).send({ error: ReasonPhrases.UNAUTHORIZED });
+      return;
     }
-    res.status(StatusCodes.UNAUTHORIZED).send({ error: ReasonPhrases.UNAUTHORIZED });
+
+    next();
   } catch (error) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
   }
 }
 
-function getModel(url) {
+function getModelFromUrl(url) {
   if (!url) {
     return null;
   }
 
   const pathArray = url.split('/');
-  const path = pathArray[1] || null;
+  const modelName = pathArray[1] || null;
 
-  switch (path) {
+  switch (modelName) {
     case 'urls':
-      return require('../models/url');
+      return UrlModel;
     default:
       return null;
   }
 }
 
-module.exports = idorPrevention;
+module.exports = preventIdor;
