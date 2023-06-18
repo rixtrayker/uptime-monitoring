@@ -12,7 +12,7 @@ exports.up = function (knex) {
     table.integer('threshold').nullable().defaultTo(1);
     table.jsonb('authentication').nullable();
     table.jsonb('http_headers').nullable();
-    table.jsonb('assert').nullable();
+    table.integer('assert').nullable();
     table.specificType('tags', 'varchar(255)[]').nullable();
     table.boolean('ignore_ssl').nullable().defaultTo(false);
     table.integer('user_id').unsigned();

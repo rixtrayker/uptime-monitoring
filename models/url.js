@@ -25,7 +25,7 @@ class Url extends Model {
         threshold: { type: 'integer', nullable: true, default: 1 },
         authentication: { type: 'object', nullable: true },
         http_headers: { type: 'object', nullable: true },
-        assert: { type: 'object', nullable: true },
+        assert: { type: 'integer', nullable: true },
         tags: { type: 'array', items: { type: 'string' }, nullable: true },
         ignore_ssl: { type: 'boolean', nullable: true, default: false },
         user_id: { type: 'integer' },

@@ -13,7 +13,7 @@ function validateCreate(url) {
     threshold: Joi.number().integer().allow(null),
     authentication: Joi.object().allow(null),
     http_headers: Joi.object().allow(null),
-    assert: Joi.object().allow(null),
+    assert: Joi.number().allow(null),
     tags: Joi.array().items(Joi.string()).allow(null),
     ignore_ssl: Joi.boolean().allow(null).default(false),
   });
@@ -36,7 +36,7 @@ function validateUpdate(url) {
     threshold: Joi.number().integer().allow(null),
     authentication: Joi.object().allow(null),
     http_headers: Joi.object().allow(null),
-    assert: Joi.object().allow(null),
+    assert: Joi.number().allow(null),
     tags: Joi.array().items(Joi.string()).allow(null),
     ignore_ssl: Joi.boolean().allow(null).default(false),
   });
