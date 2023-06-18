@@ -15,7 +15,9 @@ Build the API project and refine it.
 First install packages `npm i`
 
 run `npm start` to start the server
+
 don't forget to set value in `.env` see `.env.example`
+
 run `npx knex migrate:latest` to migrate database tables
 
 ## About project
