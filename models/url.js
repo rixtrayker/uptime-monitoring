@@ -1,5 +1,6 @@
 const { Model } = require('objection');
 const db = require('../utils/db');
+const monitor = require('../utils/monitor');
 
 Model.knex(db);
 
@@ -11,7 +12,6 @@ class Url extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['name', 'url', 'protocol'],
       properties: {
         id: { type: 'integer' },
         name: { type: 'string' },

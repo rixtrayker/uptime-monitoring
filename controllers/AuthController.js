@@ -1,4 +1,3 @@
-const Joi = require('joi');
 const AuthService = require('../services/AuthService');
 const { StatusCodes } = require('http-status-codes');
 const { validateLogin, validateRegister } = require('../validate/AuthValidator');
@@ -17,7 +16,7 @@ const AuthController = {
       res.status(StatusCodes.CREATED).json({ message: 'Registered successfully', user });
     } catch (error) {
       console.error(error);
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+      res.status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message});
     }
   },
 
@@ -34,13 +33,14 @@ const AuthController = {
      
       res.json({ message: 'Login successful', token });
     } catch (error) {
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
+      res.status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
     }
   },
   async verifyEmail(req, res){
     const success = await AuthService.verifyEmail(req.token);
     if(!success){
-      return res.status(StatusCodes.NOT_FOUND).json({message:"Wrong link or expired link or verified"});
+      res.status(StatusCodes.NOT_FOUND).json({message:"Wrong link or expired link or verified"});
+      return;
     }
 
     res.status(StatusCodes.OK).json({message:"Your email verified"});

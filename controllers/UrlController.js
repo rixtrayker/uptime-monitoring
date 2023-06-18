@@ -67,7 +67,6 @@ const UrlController =  {
 
         if(Object.keys(result).length === 0) {
           res.status(StatusCodes.NOT_FOUND).send(ReasonPhrases.NOT_FOUND);
-          return;
         } else{
           res.status(StatusCodes.OK).send({url:result});
         }
@@ -90,7 +89,6 @@ const UrlController =  {
         const urls = await UrlService.findByTags(tags);
         if(Object.keys(urls).length === 0) {
           res.status(StatusCodes.NOT_FOUND).send(ReasonPhrases.NOT_FOUND);
-          return;
         } else{
           res.status(StatusCodes.OK).send({urls});
         }
