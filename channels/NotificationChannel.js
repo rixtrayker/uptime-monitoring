@@ -3,7 +3,7 @@ const mail = require('../utils/mail');
 const pushOver = require('../utils/pushover');
 const { generateReport } = require('../utils/report');
 const { logger } = require('handlebars');
-
+const Url = require('../models/Url');
 class NotificationChannel extends Channel {
   constructor() {
     super();
@@ -14,17 +14,20 @@ class NotificationChannel extends Channel {
 
   async restored(res, state) {
     this.sendNotification(state);
+    webhookNotify(state);
   }
 
   async down(res, state) {
     if (state.shouldAlertDown) {
       this.sendNotification(state);
+      webhookNotify(state);
     }
   }
 
   async timeout(error, res, state) {
     if (state.shouldAlertDown) {
       this.sendNotification(state);
+      webhookNotify(state);
     }
   }
 
@@ -33,6 +36,15 @@ class NotificationChannel extends Channel {
   stop(res, state) {}
 
   error(error, res) {}
+
+  async webhookNotify(state) {
+    const url = await Url.query().where({ id: state.metaData.id }).first();
+    const status = ['DOWN', 'UP'][state.isUp & 1];
+
+    hook = `${url.webhook}?status=${status}&url_id=${state.metaData.id}`;
+
+    fetch(hook).catch((err) => {console.log(err)});
+  }
 
   async sendNotification(state) {
     const report = await generateReport(state);
