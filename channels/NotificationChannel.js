@@ -1,6 +1,6 @@
 const Channel = require('./Channel');
 const mail = require('../utils/mail');
-const pushOver = require('../utils/pushover');
+const pushoverSend = require('../utils/pushover');
 const { generateReport } = require('../utils/report');
 const { logger } = require('handlebars');
 const Url = require('../models/Url');
@@ -54,7 +54,7 @@ class NotificationChannel extends Channel {
     } catch (err) {
       logger.error(error);
     }
-    // pushOver.sendPushOver(state.metaData.pushover, report);
+    pushoverSend(report);
   }
 }
 
