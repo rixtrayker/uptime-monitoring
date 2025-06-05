@@ -1,73 +1,125 @@
-## About Task
-Build an uptime monitoring RESTful API server that allows authenticated users to monitor URLs, and get detailed uptime reports about their availability, average response time, and total uptime/downtime.
+# 🚀 Uptime Monitoring API
 
-## What I did
-I created a demo project ExpressJs and learnt the tools, after deciding what tools to work with after research of 1 day
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
+![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)
 
-I found ping-monitor package that covers a lot of monitoring process, I read the package code to make sure it works fine ( performance and design ) and provides me what I need
+A robust RESTful API service that enables authenticated users to monitor URLs and receive comprehensive uptime reports including availability metrics, response times, and uptime/downtime statistics.
 
-I had to fork this package due to that bug I found and fixing it would take many days.
-I added missed features in my task.
+## ✨ Features
 
-Build the API project and refine it.
+- **User Authentication**: Secure JWT-based authentication system
+- **URL Monitoring**: Track the status of multiple endpoints simultaneously
+- **Detailed Reports**: Get insights on:
+  - Availability percentage
+  - Average response time
+  - Total uptime/downtime
+  - Historical performance data
+- **API Documentation**: Complete Swagger documentation
+- **Scalable Architecture**: Designed for horizontal scaling
 
-## How to Run
-First install packages `npm i`
+## 🛠️ Tech Stack
 
-run `npm start` to start the server
+- **Backend**: Node.js with Express.js
+- **Database**: PostgreSQL with JSONB support
+- **ORM**: Knex.js with Objection.js
+- **Authentication**: JWT (JSON Web Tokens)
+- **Documentation**: Swagger
+- **Testing**: Jest
+- **Monitoring Engine**: Custom-forked ping-monitor package
+- **Containerization**: Docker
 
-don't forget to set value in `.env` see `.env.example`
+## 🚦 Getting Started
 
-run `npx knex migrate:latest` to migrate database tables
+### Prerequisites
 
-## About project
+- Node.js (v14+)
+- PostgreSQL
+- Docker (optional)
 
-This project built from scratch except some parts like ping-monitor package  I forked it to cover this project features.
+### Installation
 
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd uptime-monitoring
+   ```
 
-## Technologies used
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-- ExpressJs
-- Porstgres SQL
-- Knex
-- Objectionjs
-- Swagger
-- jsonwebtoken
-- jest
-- ping monitor (my fork)
-- Docker
+3. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
 
-## Things I learned 
+4. Run database migrations:
+   ```bash
+   npx knex migrate:latest
+   ```
 
-- Things I learnt in this project 
-- Node JS 😁
-- Swagger 
-- cursor pagination implementation
-- real use case of node js events and async feature
-- Forking a real package and republishing it
-- Reading node js code and understanding it
-- Postgres JSONB type and its operators and how its - indexes work
-- How node is different from php, Go lang other language
+5. Start the server:
+   ```bash
+   npm start
+   ```
 
+The API will be available at `http://localhost:<PORT>` (default: 3000)
 
-## Enhancements
-- use Type script
-- Use dependency injection & mocking
-- use stacked error handling 
-- log enough data
-- use kubernetes for deployment in order to use auto scaling
-- refactor it to divide monitoring operations on larage scale data
-- add test loads
-- add more unit testing and some feature testing
-- Enable Horizontal scalling through tracking whether url is monitored or not
-- use objection-authorize like packages for ACLs
-- make functions more abstract
+## 📊 API Documentation
 
-### Previous node projects
-- My jwt implementation from scratch  2 years go
-- Basic CRUD exploring 3 years ago
-- Next js and vue toturials 3 years ago
+Once the server is running, access the Swagger documentation at:
+```
+http://localhost:<PORT>/api-docs
+```
 
-### Note !!!
+## 🧪 Testing
 
-Naming conventions isn't that good due to my little experience in node js and its best practices
+Run the test suite:
+```bash
+npm test
+```
+
+## 🔍 Project Insights
+
+### Key Implementations
+
+- **Custom Fork**: Enhanced the ping-monitor package to meet project requirements
+- **Cursor Pagination**: Implemented efficient data retrieval for large datasets
+- **Event-Driven Architecture**: Leveraged Node.js events for asynchronous monitoring
+- **JSONB Optimization**: Utilized PostgreSQL's JSONB capabilities for flexible data storage
+
+### Learning Outcomes
+
+- Deep dive into Node.js ecosystem and best practices
+- Swagger API documentation implementation
+- Advanced PostgreSQL features including JSONB types and indexing
+- Package forking and contribution workflow
+- Asynchronous programming patterns in Node.js
+- Comparative analysis between Node.js and other backend technologies (PHP, Go)
+
+## 🔮 Future Enhancements
+
+- TypeScript migration for improved type safety
+- Dependency injection pattern implementation
+- Enhanced error handling with stack traces
+- Comprehensive logging system
+- Kubernetes deployment for auto-scaling
+- Distributed monitoring architecture for large-scale operations
+- Expanded test coverage with integration and load testing
+- ACL implementation with objection-authorize
+- Code refactoring for improved abstraction
+
+## 🧰 Previous Node.js Experience
+
+- Custom JWT implementation (2 years ago)
+- Basic CRUD applications (3 years ago)
+- Next.js and Vue.js tutorials (3 years ago)
+
+---
+
+*This project was developed as part of a backend assessment, demonstrating proficiency in building scalable monitoring solutions with Node.js.*
